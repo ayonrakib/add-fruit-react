@@ -37,7 +37,7 @@
   }
 }
 
-#addFruitBlock, #middleBar{
+#addFruitBlock, #middleBar, #showFruitsBlock{
   display: inline-block;
   margin-left: 150px;
   margin-top: 150px;
