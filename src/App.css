@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#addFruitBlock, #middleBar{
+  display: inline-block;
+  margin-left: 150px;
+  margin-top: 150px;
+}
+
+#middleBar{
+  width: 20px;
+  height: 100px;
+  background-color: brown;
+}
