@@ -1,6 +1,9 @@
 // import logo from './logo.svg';
 import './App.css';
-import {useState} from 'react';
+import {Fragment, useState, React, Text} from 'react';
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 function App() {
   const [inputFruit, setInputFruit] = useState("");
@@ -24,14 +27,19 @@ function App() {
   // input: input fruit
   // return: nothing, just add the fruit in fruits list
   // method:
-  //    1. temporary fruits naam e ekta var banabo jar value hobe fruits state variable
-  //    2. temporary fruits e append korbo input fruit
-  //    3. setFruits method call with temporary fruits
-  //    4. showFruits method call
+  //    1. clone fruits list into temp list
+  //    2. temp fruits e push input fruit
+  //    3. set input fruits call with temp fruits
+  //    4. call show fruits func
   function addFruit(inputFruit){
-    var temporaryFruits = fruits;
+    // var temporaryFruits = fruits;
+    // temporaryFruits.push(inputFruit);
+    // setfruits(temporaryFruits);
+    var temporaryFruits = [...fruits];
+    console.log("addFruit => temp fruits is: ",temporaryFruits);
     temporaryFruits.push(inputFruit);
     setfruits(temporaryFruits);
+    console.log("addFruit => Current fruits list is: ",fruits);
     showFruits();
   }
 
@@ -39,13 +47,18 @@ function App() {
   // input: none
   // return: none, just show the current fruits list
   // method:
-  //    1. current Fruitline hobe fruitline er soman
+  //    1. current Fruitline hobe empty str
   //    2. fruits er sob index er jonno:
   //      1. current fruitline e concat korbo cross icon block div er vitore cross icon and fruits er current index
-  //    3. showFruitsBlock e html akare dekhabo current fruit line
-  //    4. setFruitLine method call with current fruit line
+  //    3. setFruitLine method call with current fruit line
   function showFruits(){
     console.log("showFruits => Current fruits list is: ",fruits);
+    var currentFruitLine = "";
+    for(var index = 0; index < fruits.length; index++){
+      // currentFruitLine += <Fragment><FontAwesomeIcon icon={faHome} /></Fragment>  + fruits[index] + '\n';
+      currentFruitLine += fruits[index] + '\n';
+    }
+    setfruitLine(currentFruitLine);
   }
   return (
     <div>
@@ -56,15 +69,12 @@ function App() {
         <div>
           <button id = "addFruitButton" onClick = {handleAdd}>Add Fruit</button>
         </div>
-        <div>
-          <button id = "showFruitButton" onClick = {showFruits}>Show Fruits</button>
-        </div>
       </div>
       <div id = "middleBar">
 
       </div>
       <div id = "showFruitsBlock">
-
+        {fruitLine}
       </div>
     </div>
   );
