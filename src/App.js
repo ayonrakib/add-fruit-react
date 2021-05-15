@@ -1,15 +1,40 @@
 // import logo from './logo.svg';
 import './App.css';
-import {Fragment, useState, React, Text} from 'react';
+import {Fragment, useState, React, Text, useEffect} from 'react';
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// function Example() {
+//   const [count, setCount] = useState(0);
+
+//   // Similar to componentDidMount and componentDidUpdate:
+//   useEffect(() => {
+//     // Update the document title using the browser API
+//     document.title = `You clicked ${count} times`;
+//   });
+
+//   return (
+//     <div>
+//       <p>You clicked {count} times</p>
+//       <button onClick={() => setCount(count + 1)}>
+//         Click me
+//       </button>
+//     </div>
+//   );
+// }
 
 function App() {
   const [inputFruit, setInputFruit] = useState("");
   const initialFruits = [];
   const [fruits, setfruits] = useState(initialFruits);
-  const [fruitLine, setfruitLine] = useState("");
+  const [fruitLines, setfruitLines] = useState([]);
+
+  useEffect(() => {
+    console.log("useEffect: value of fruits is:", fruits);
+    console.log("useEffect: value of fruitLines is:", fruitLines);
+    console.log("useEffect: value of input fruit is:", inputFruit);
+    console.log(fruitLines);
+  });
   function handleFruitNameChange(event){
     setInputFruit(event.target.value);
     console.log("handleFruitNameChange: The updated input fruit is: ",inputFruit);
@@ -47,18 +72,20 @@ function App() {
   // input: none
   // return: none, just show the current fruits list
   // method:
-  //    1. current Fruitline hobe empty str
+  //    1. current fruitLines hobe empty list
   //    2. fruits er sob index er jonno:
-  //      1. current fruitline e concat korbo cross icon block div er vitore cross icon and fruits er current index
-  //    3. setFruitLine method call with current fruit line
+  //      1. current fruitLines e concat korbo cross icon block div er vitore cross icon and fruits er current index
+  //    3. setfruitLines method call with current fruit line
   function showFruits(){
     console.log("showFruits => Current fruits list is: ",fruits);
-    var currentFruitLine = "";
+    var currentfruitLines = [];
     for(var index = 0; index < fruits.length; index++){
-      // currentFruitLine += <Fragment><FontAwesomeIcon icon={faHome} /></Fragment>  + fruits[index] + '\n';
-      currentFruitLine += fruits[index] + '\n';
+      currentfruitLines.push(<li>{fruits[index]}</li>);
+      // currentfruitLines += fruits[index] + '\n';
+
     }
-    setfruitLine(currentFruitLine);
+    var fruitContainer = <ul>{currentfruitLines}</ul>;
+    setfruitLines(fruitContainer);
   }
   return (
     <div>
@@ -74,7 +101,9 @@ function App() {
 
       </div>
       <div id = "showFruitsBlock">
-        {fruitLine}
+
+          {fruitLines}
+        
       </div>
     </div>
   );
