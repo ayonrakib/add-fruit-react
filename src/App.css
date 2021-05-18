@@ -48,3 +48,11 @@
   height: 100px;
   background-color: brown;
 }
+
+#fruitLine, .crossIcon, #fruitName{
+  display: inline-block;
+}
+
+#fruitName{
+  margin-left: 10px;
+}

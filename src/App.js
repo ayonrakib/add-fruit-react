@@ -67,8 +67,7 @@ function App() {
     console.log("addFruit => Current fruits list is: ",fruits);
     showFruits();
   }
-
-  // showFruits
+  // updateCurrentFruitLinesToFruitLines
   // input: none
   // return: none, just show the current fruits list
   // method:
@@ -77,12 +76,13 @@ function App() {
   //      1. current fruitLines e concat korbo cross icon block div er vitore cross icon and fruits er current index
   //    3. setfruitLines method call with current fruit line
   function showFruits(){
+    deleteFruit = (index) => {
+      console.log("deleteFruit => index is: ",index);
+    }
     console.log("showFruits => Current fruits list is: ",fruits);
     var currentfruitLines = [];
     for(var index = 0; index < fruits.length; index++){
-      currentfruitLines.push(<li>{fruits[index]}</li>);
-      // currentfruitLines += fruits[index] + '\n';
-
+      currentfruitLines.push(<li><div className = "crossIcon" id = {index}><FontAwesomeIcon icon={faHome} onClick = {deleteFruit(index)} /></div><div id = "fruitName">{fruits[index]}</div> </li>);
     }
     var fruitContainer = <ul>{currentfruitLines}</ul>;
     setfruitLines(fruitContainer);
@@ -101,9 +101,8 @@ function App() {
 
       </div>
       <div id = "showFruitsBlock">
-
           {fruitLines}
-        
+          
       </div>
     </div>
   );
