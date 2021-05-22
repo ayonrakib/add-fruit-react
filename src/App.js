@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import {Fragment, useState, React, Text, useEffect} from 'react';
+import {useState, React, useEffect} from 'react';
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -65,7 +65,7 @@ function App() {
     temporaryFruits.push(inputFruit);
     setfruits(temporaryFruits);
     console.log("addFruit => Current fruits list is: ",fruits);
-    showFruits();
+    updateCurrentFruitLinesToFruitLines();
   }
   // updateCurrentFruitLinesToFruitLines
   // input: none
@@ -75,18 +75,51 @@ function App() {
   //    2. fruits er sob index er jonno:
   //      1. current fruitLines e concat korbo cross icon block div er vitore cross icon and fruits er current index
   //    3. setfruitLines method call with current fruit line
-  function showFruits(){
-    deleteFruit = (index) => {
-      console.log("deleteFruit => index is: ",index);
-    }
-    console.log("showFruits => Current fruits list is: ",fruits);
-    var currentfruitLines = [];
-    for(var index = 0; index < fruits.length; index++){
-      currentfruitLines.push(<li><div className = "crossIcon" id = {index}><FontAwesomeIcon icon={faHome} onClick = {deleteFruit(index)} /></div><div id = "fruitName">{fruits[index]}</div> </li>);
-    }
-    var fruitContainer = <ul>{currentfruitLines}</ul>;
-    setfruitLines(fruitContainer);
+  function deleteFruits(e){
+    console.log(e.currentTarget.id);
   }
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   return (
     <div>
       <div id = "addFruitBlock">
