@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
-import {useState, React, useEffect} from 'react';
+import {useState, useEffect} from 'react';
+import React from 'react';
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -28,13 +29,19 @@ function App() {
   const initialFruits = [];
   const [fruits, setfruits] = useState(initialFruits);
   const [fruitLines, setfruitLines] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     console.log("useEffect: value of fruits is:", fruits);
     console.log("useEffect: value of fruitLines is:", fruitLines);
     console.log("useEffect: value of input fruit is:", inputFruit);
     console.log(fruitLines);
+    setCount(count+1);
+    updateCurrentFruitLinesToFruitLines();
   });
+
+  // 1. count = 0 at first
+  // 
   function handleFruitNameChange(event){
     setInputFruit(event.target.value);
     console.log("handleFruitNameChange: The updated input fruit is: ",inputFruit);
@@ -47,6 +54,51 @@ function App() {
   function handleAdd(){
     addFruit(inputFruit);
   }
+
+
+  // handleDelete
+  // input: none
+  // return: nothing
+  // method:
+  //  1. deleteFruit method call
+  function handleDelete(){
+    deleteFruits();
+  }
+
+
+  // deleteFruit
+  // input: event
+  // return: nothing, just delete the latest fruit from the fruits list
+  // method:
+  //  1. fruits list er last element delete korbo
+  //  2. setFruits e modified fruits list
+  function deleteFruits(){
+    fruits.shift();
+    setfruits(fruits);
+    showFruits();
+  }
+
+  // handleDeleteAndShowUpdatedFruits
+  // input: nothing
+  // return: nothing
+  // method:
+  //  1. call updateCurrentFruitLinesToFruitLines method
+  function handleDeleteAndShowUpdatedFruits(){
+    updateCurrentFruitLinesToFruitLines();
+  }
+
+
+
+  // showFruits
+  // input: none
+  // return: nothing just log current fruits list
+  // method:
+  //  1. log current fruits list
+  function showFruits(){
+    console.log("showFruits => current fruits list is: ",fruits);
+  }
+
+
 
   // addFruit
   // input: input fruit
@@ -64,8 +116,8 @@ function App() {
     console.log("addFruit => temp fruits is: ",temporaryFruits);
     temporaryFruits.push(inputFruit);
     setfruits(temporaryFruits);
-    console.log("addFruit => Current fruits list is: ",fruits);
-    updateCurrentFruitLinesToFruitLines();
+    console.log("addFruit => Previous fruits list is: ",fruits);
+    // updateCurrentFruitLinesToFruitLines();
   }
   // updateCurrentFruitLinesToFruitLines
   // input: none
@@ -75,50 +127,24 @@ function App() {
   //    2. fruits er sob index er jonno:
   //      1. current fruitLines e concat korbo cross icon block div er vitore cross icon and fruits er current index
   //    3. setfruitLines method call with current fruit line
-  function deleteFruits(e){
-    console.log(e.currentTarget.id);
-  }
-  
-  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // updateCurrentFruitLinesToFruitLines
+  // input: nothing
+  // return: nothing, just update the new fruits line to existing fruits list
+  // method:
+  //  1. currentFruitLines empty list
+  //  2. fruits er sob fruit er jonno:
+  //    1. currentFruitLines e push list akare house icon and current fruit
+  //  3. fruitContainer e unordered list akare boshabo current fruit lines
+  //  4. setFruitLines e call fruitContainer
+  function updateCurrentFruitLinesToFruitLines(){
+    var currentFruitLines = [];
+    for(var index = 0; index < fruits.length; index++){
+      currentFruitLines.push(<li><div className = "crossIcon" id = {index} onClick = {deleteFruits}><FontAwesomeIcon icon = {faHome}></FontAwesomeIcon></div> <div id = "fruitName">{fruits[index]}</div></li>)
+    }
+    var fruitContainer = <ul>{currentFruitLines}</ul>;
+    setfruitLines(fruitContainer);
+  } 
   
   return (
     <div>
@@ -129,6 +155,15 @@ function App() {
         <div>
           <button id = "addFruitButton" onClick = {handleAdd}>Add Fruit</button>
         </div>
+        <div>
+          <button id = "deleteFruitButton" onClick = {handleDelete}>Delete Fruit</button>
+        </div>
+        <div>
+          <button id = "deleteFruitButton2" onClick = {handleDeleteAndShowUpdatedFruits}>Delete Fruit2</button>
+        </div>
+        <div>
+          <button id = "showFruitsButton" onClick = {showFruits}>Show Fruits</button>
+        </div>
       </div>
       <div id = "middleBar">
 
@@ -136,6 +171,9 @@ function App() {
       <div id = "showFruitsBlock">
           {fruitLines}
           
+      </div>
+      <div>
+        The value of count is: {count}
       </div>
     </div>
   );
