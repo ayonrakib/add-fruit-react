@@ -23,6 +23,6 @@ jobs:
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
               cd /datadisk/react &&
-              git pull origin main
+              git pull
             ' \
             --output text
