@@ -23,6 +23,11 @@ jobs:
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
               cd /datadisk/react/add-fruit-react &&
-              git pull
+              git status &&
+              git show HEAD &&
+              git checkout master &&
+              git pull origin master > pull.log 2>&1 &&
+              git show HEAD &&
+              cat pull.log
             ' \
             --output text
