@@ -22,6 +22,7 @@ jobs:
             --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
+              whoami && 
               cd /datadisk/react/add-fruit-react &&
               git status &&
               git show HEAD &&
