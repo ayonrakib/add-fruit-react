@@ -19,7 +19,7 @@ jobs:
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --comment "Git Pull React App" \
-            --instance-ids "${{ secrets.INSTANCE_ID }}" \
+            --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
               cd /datadisk/react &&
