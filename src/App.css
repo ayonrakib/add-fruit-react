@@ -49,10 +49,10 @@
   background-color: brown;
 }
 
-#fruitLine, .crossIcon, #fruitName{
+#fruitLine, .crossIcon, .fruitName{
   display: inline-block;
 }
 
-#fruitName{
+.fruitName{
   margin-left: 10px;
 }

@@ -2,7 +2,7 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import React from 'react';
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCross, faHome, faRemoveFormat, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // function Example() {
@@ -36,7 +36,7 @@ function App() {
     console.log("useEffect: value of fruitLines is:", fruitLines);
     console.log("useEffect: value of input fruit is:", inputFruit);
     console.log(fruitLines);
-    setCount(count+1);
+    // setCount(count+1);
     updateCurrentFruitLinesToFruitLines();
   });
 
@@ -117,7 +117,7 @@ function App() {
     temporaryFruits.push(inputFruit);
     setfruits(temporaryFruits);
     console.log("addFruit => Previous fruits list is: ",fruits);
-    // updateCurrentFruitLinesToFruitLines();
+    updateCurrentFruitLinesToFruitLines();
   }
   // updateCurrentFruitLinesToFruitLines
   // input: none
@@ -140,9 +140,9 @@ function App() {
   function updateCurrentFruitLinesToFruitLines(){
     var currentFruitLines = [];
     for(var index = 0; index < fruits.length; index++){
-      currentFruitLines.push(<li><div className = "crossIcon" id = {index} onClick = {deleteFruits}><FontAwesomeIcon icon = {faHome}></FontAwesomeIcon></div> <div id = "fruitName">{fruits[index]}</div></li>)
+      currentFruitLines.push(<div><div className = "crossIcon" id = {index} onClick = {deleteFruits}><FontAwesomeIcon icon = {faTrash}></FontAwesomeIcon></div> <div className = "fruitName">{fruits[index]}</div></div>)
     }
-    var fruitContainer = <ul>{currentFruitLines}</ul>;
+    var fruitContainer = <div>{currentFruitLines}</div>;
     setfruitLines(fruitContainer);
   } 
   
@@ -173,7 +173,7 @@ function App() {
           
       </div>
       <div>
-        The value of count is: {count}
+        {/* The value of count is: {count} */}
       </div>
     </div>
   );
