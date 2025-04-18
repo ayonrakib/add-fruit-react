@@ -22,7 +22,7 @@ jobs:
             --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
-              cd /datadisk/react &&
+              cd /datadisk/react/add-fruit-react &&
               git pull
             ' \
             --output text
