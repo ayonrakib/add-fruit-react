@@ -10,20 +10,24 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Trigger git pull on EC2 via SSM
+      - name: Trigger git pull on EC2 via SSM as ssm-user
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_INSTANCE_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
         run: |
-          echo ${{ secrets.AWS_ACCESS_KEY_ID }}
-          echo ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          echo ${{ secrets.AWS_INSTANCE_ID }}
-          echo ${{ secrets.AWS_REGION }}
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --comment "Git Pull React App" \
-            --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
-            --region "${{ secrets.AWS_REGION }}" \
-            --parameters 'commands=[ "cd /home/ssm-user", "whoami", "echo Current directory: $(pwd)", "ls -la","cd /home/ssm-user", "if [ ! -d \"add-fruit-react/.git\" ]; then git clone https://github.com/ayonrakib/add-fruit-react.git; else cd add-fruit-react && git checkout master && git pull origin master; fi"]' \
+            --comment "Git Pull React App as ssm-user" \
+            --instance-ids "$INSTANCE_ID" \
+            --region "$AWS_REGION" \
+            --parameters 'commands=[
+              "sudo -u ssm-user bash -c \"cd /home/ssm-user && \
+              if [ ! -d 'add-fruit-react/.git' ]; then \
+                git clone https://github.com/ayonrakib/add-fruit-react.git; \
+              else \
+                cd add-fruit-react && git checkout master && git pull origin master; \
+              fi\""
+            ]' \
             --output text
