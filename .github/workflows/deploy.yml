@@ -25,13 +25,6 @@ jobs:
             --comment "Git Pull React App" \
             --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
             --region "${{ secrets.AWS_REGION }}" \
-            --parameters commands='
-              if [ ! -d "add-fruit-react/.git" ]; then
-                git clone https://github.com/ayonrakib/add-fruit-react.git
-              else
-                cd add-fruit-react &&
-                git checkout master &&
-                git pull origin master
-              fi
+            --parameters 'commands=["cd /datadisk/react", "if [ ! -d \"add-fruit-react/.git\" ]; then git clone https://github.com/ayonrakib/add-fruit-react.git; else cd add-fruit-react && git checkout master && git pull origin master; fi"]' \
             ' \
             --output text
