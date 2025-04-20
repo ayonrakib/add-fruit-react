@@ -29,7 +29,6 @@ jobs:
               else \
                 cd add-fruit-react && git checkout master && git pull origin master; \
               fi; \
-              npm run build
-              ""
+              npm run build\""
             ]' \
             --output text
