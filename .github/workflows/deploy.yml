@@ -26,13 +26,12 @@ jobs:
             --instance-ids "${{ secrets.AWS_INSTANCE_ID }}" \
             --region "${{ secrets.AWS_REGION }}" \
             --parameters commands='
-              whoami && 
-              cd /datadisk/react/add-fruit-react &&
-              git status &&
-              git show HEAD &&
-              git checkout master &&
-              git pull origin master
-              git show HEAD &&
-              cat pull.log
+              if [ ! -d "add-fruit-react/.git" ]; then
+                git clone https://github.com/ayonrakib/add-fruit-react.git
+              else
+                cd add-fruit-react &&
+                git checkout master &&
+                git pull origin master
+              fi
             ' \
             --output text
