@@ -28,6 +28,8 @@ jobs:
                 git clone https://github.com/ayonrakib/add-fruit-react.git; \
               else \
                 cd add-fruit-react && git checkout master && git pull origin master; \
-              fi\""
+              fi\
+              npm run build
+              ""
             ]' \
             --output text
