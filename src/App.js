@@ -192,6 +192,7 @@ function App() {
       <div id="middleBar"></div>
       <div id="showFruitsBlock">{fruitLines}</div>
       <div>{/* The value of count is: {count} */}</div>
+      <div>The env is: {process.env.REACT_APP_ENVIRONMENT}</div>
     </div>
   );
 }
