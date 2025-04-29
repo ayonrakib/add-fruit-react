@@ -1,4 +1,4 @@
-name: Git Pull on EC2 via SSM
+name: Git Pull and Deploy React App via SSM
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Trigger git pull on EC2 via SSM as ssm-user with NVM
+      - name: Git Pull React App on EC2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -19,19 +19,55 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --comment "Git Pull React App as ssm-user with NVM" \
+            --comment "Git Pull React App" \
             --instance-ids "$INSTANCE_ID" \
             --region "$AWS_REGION" \
             --parameters 'commands=[
               "sudo -u ssm-user bash -c \"\
-                source /home/ssm-user/.nvm/nvm.sh && \
-                nvm use 20 && \
                 cd /home/ssm-user && \
                 if [ ! -d 'add-fruit-react/.git' ]; then \
                   git clone https://github.com/ayonrakib/add-fruit-react.git; \
                 else \
                   cd add-fruit-react && git checkout master && git pull origin master; \
-                fi && \
-                cd /home/ssm-user/add-fruit-react && npm install && npm run build\""
+                fi\""
+            ]' \
+            --output text
+
+      - name: Build React App on EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "Build React App" \
+            --instance-ids "$INSTANCE_ID" \
+            --region "$AWS_REGION" \
+            --parameters 'commands=[
+              "sudo -u ssm-user bash -c \"\
+                source /home/ssm-user/.nvm/nvm.sh && \
+                nvm use 17 && \
+                cd /home/ssm-user/add-fruit-react && \
+                npm install && npm run build\""
+            ]' \
+            --output text
+
+      - name: Upload Build Folder to S3 from EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "Upload Build to S3" \
+            --instance-ids "$INSTANCE_ID" \
+            --region "$AWS_REGION" \
+            --parameters 'commands=[
+              "sudo -u ssm-user bash -c \"\
+                aws s3 cp /home/ssm-user/add-fruit-react/build/ s3://nodejs-bucket-ayon/ --recursive\""
             ]' \
             --output text
