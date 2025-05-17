@@ -15,6 +15,7 @@ jobs:
         with:
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
 
       - name: Turn on EC2
         run: aws ec2 start instances --instance-ids i-07ea54875f1e02de6
