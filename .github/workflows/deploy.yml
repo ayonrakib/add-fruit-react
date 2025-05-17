@@ -25,30 +25,34 @@ jobs:
 
       - name: Wait for SSM to become available
         run: |
-          echo "Waiting for EC2 instance $INSTANCE_ID to become managed by SSM..."
+          echo "Waiting for EC2 instance $INSTANCE_ID to register with SSM..."
 
           for i in {1..30}; do
-            STATUS=$(aws ssm describe-instance-information \
-              --region "$AWS_REGION" \
-              --query "InstanceInformationList[?InstanceId=='$INSTANCE_ID'].PingStatus" \
-              --output text)
+            echo "Checking instance status (Attempt $i)..."
 
-            if [ -z "$STATUS" ]; then
-              echo "Attempt $i: Instance not found in SSM yet."
-            else
-              echo "Attempt $i: Instance PingStatus = $STATUS"
-            fi
+            aws ssm describe-instance-information \
+              --region "$AWS_REGION" \
+              --output json \
+              > ssm_status.json
+
+            cat ssm_status.json
+
+            STATUS=$(jq -r ".InstanceInformationList[] | select(.InstanceId==\"$INSTANCE_ID\") | .PingStatus" ssm_status.json)
 
             if [ "$STATUS" = "Online" ]; then
-              echo "✅ Instance is online in SSM!"
+              echo "✅ SSM PingStatus is Online!"
               break
+            elif [ -z "$STATUS" ]; then
+              echo "⏳ Instance not found in SSM list yet."
+            else
+              echo "🔁 SSM PingStatus is: $STATUS"
             fi
 
             sleep 10
           done
 
           if [ "$STATUS" != "Online" ]; then
-            echo "❌ Instance did not become available in SSM within the expected time."
+            echo "❌ Instance never became Online in SSM."
             exit 1
           fi
 
