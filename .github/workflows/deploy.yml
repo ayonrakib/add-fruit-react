@@ -119,5 +119,6 @@ jobs:
             --output text
 
       - name: Stop EC2 Instance
+        if: always()
         run: |
           aws ec2 stop-instances --instance-ids i-07ea54875f1e02de6
