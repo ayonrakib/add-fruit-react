@@ -37,21 +37,21 @@ jobs:
 
             cat ssm_status.json
 
-            STATUS=$(jq -r ".InstanceInformationList[] | select(.InstanceId==\"$INSTANCE_ID\") | .PingStatus" ssm_status.json)
+            ping_status=$(grep -A 5 "$INSTANCE_ID" ssm_status.json | grep PingStatus | cut -d '"' -f4)
 
-            if [ "$STATUS" = "Online" ]; then
+            if [ "$ping_status" = "Online" ]; then
               echo "✅ SSM PingStatus is Online!"
               break
-            elif [ -z "$STATUS" ]; then
+            elif [ -z "$ping_status" ]; then
               echo "⏳ Instance not found in SSM list yet."
             else
-              echo "🔁 SSM PingStatus is: $STATUS"
+              echo "🔁 SSM PingStatus is: $ping_status"
             fi
 
             sleep 10
           done
 
-          if [ "$STATUS" != "Online" ]; then
+          if [ "$ping_status" != "Online" ]; then
             echo "❌ Instance never became Online in SSM."
             exit 1
           fi
