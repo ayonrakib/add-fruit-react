@@ -19,7 +19,7 @@ jobs:
 
       - name: Turn on EC2
         run: |
-          aws ec2 start instances --instance-ids i-07ea54875f1e02de6
+          aws ec2 start-instances --instance-ids i-07ea54875f1e02de6
           echo "Waiting for instance to be turned on"
           aws ec2 wait instance-running --instance-ids i-07ea54875f1e02de6
 
