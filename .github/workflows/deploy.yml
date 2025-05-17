@@ -25,19 +25,32 @@ jobs:
 
       - name: Wait for SSM to become available
         run: |
-          echo "Waiting for EC2 to be managed by SSM..."
-          while true; do
+          echo "Waiting for EC2 instance $INSTANCE_ID to become managed by SSM..."
+
+          for i in {1..30}; do
             STATUS=$(aws ssm describe-instance-information \
-              --query "InstanceInformationList[?InstanceId=='i-0abc123xyz456'].PingStatus" \
+              --region "$AWS_REGION" \
+              --query "InstanceInformationList[?InstanceId=='$INSTANCE_ID'].PingStatus" \
               --output text)
-            if [ "$STATUS" == "Online" ]; then
-              echo "SSM is ready!"
-              break
+
+            if [ -z "$STATUS" ]; then
+              echo "Attempt $i: Instance not found in SSM yet."
             else
-              echo "Waiting for SSM... current status: $STATUS"
-              sleep 10
+              echo "Attempt $i: Instance PingStatus = $STATUS"
             fi
+
+            if [ "$STATUS" = "Online" ]; then
+              echo "✅ Instance is online in SSM!"
+              break
+            fi
+
+            sleep 10
           done
+
+          if [ "$STATUS" != "Online" ]; then
+            echo "❌ Instance did not become available in SSM within the expected time."
+            exit 1
+          fi
 
       - name: Git Pull React App on EC2
         env:
